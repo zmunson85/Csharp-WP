@@ -1,0 +1,54 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="Head_Container">
+    <h2>Welcome to the Wedding Planner, @ViewBag.User.FirstName</h2>
+    <a style="margin-left: 80%;" asp-action="Logout" asp-controller="Users">Logout</a>
+    <br>
+    <button style="margin-left: 80%;"><a asp-action="NewWeddingPage">New Wedding</a></button>
+</div>
+    <table class="table table-dark">
+        <tr>
+            <th>Planned Person</th>
+            <th>Wedding</th>
+            <th>Date</th>
+            <th>Guest</th>
+            <th>Action</th>
+        </tr>
+        @foreach (Wedding wedding in ViewBag.Wedding)
+        {
+            <tr>
+                <td>@wedding.PlanedBy.FirstName</td>
+                <td><a asp-action="WeddingPage" asp-route-id = "@wedding.WeddingId">@wedding.WedderOne and @wedding.WedderTwo </a></td>
+                <td>@wedding.Date</td>
+                <td>@wedding.Rsvps.Count</td>
+
+                @*Checking if guests rsvp or didn't rsvp*@
+                <td>
+                    @if (wedding.PlanedBy.UserId == ViewBag.User.UserId)
+                    {
+                        
+                        <form asp-action="DeleteWedding" asp-route-id=@wedding.WeddingId method="post">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    }
+                    @*If current user like this wedding*@
+                    else if (wedding.Rsvps.Any(Rsvp => Rsvp.UserId == ViewBag.User.UserId)) //Error can be fixed by replace the var to Movie
+                        
+                    {
+                    <form asp-action="RemoveRsvp" asp-route-id="@wedding.WeddingId" method="post">
+                        <button class="btn btn-warning">Un-RSVP</button>
+                    </form>
+                    }
+                    else
+                    {
+                    <form asp-action="AddRsvp" asp-route-id="@wedding.WeddingId" method="post">
+                        <button class="btn btn-success">RSVP</button>
+                    </form>
+                    }
+                </td>
+            </tr>
+        
+        }
+    </table>

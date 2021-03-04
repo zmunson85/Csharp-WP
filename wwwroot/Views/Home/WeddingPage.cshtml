@@ -1,0 +1,34 @@
+@* ViewBag.Wedding = _context
+    .Weddings
+    .Include(wedding => wedding.PlanedBy)
+    .Include(wedding => wedding.Rsvps)
+    .ThenInclude(rsvp => rsvp.User)
+    .FirstOrDefault(wedding => wedding.WeddingId == id); //take the wedding, whose WeddingId == id *@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Hello!</title>
+</head>
+
+<body>
+
+    <h2>@ViewBag.Wedding.WedderOne and @ViewBag.Wedding.WedderTwo's Wedding</h2>
+    <a asp-action="Dashboard" asp-controller="Home">Dashboard</a>
+    <a asp-action="Logout" asp-controller="Users">Logout</a>
+
+    <h5>Your Wedding Planner: @ViewBag.Wedding.PlanedBy.FirstName</h5>
+    <p>Date: @ViewBag.Wedding.Date</p>
+    <ul>
+        @foreach (Rsvp rsvp in @ViewBag.Wedding.Rsvps)
+        {
+            <li>@rsvp.User.FirstName</li>
+        }
+    </ul>
+    <p>Address: @ViewBag.Wedding.WeddingAddress</p>
+
+</body>
+
+</html>

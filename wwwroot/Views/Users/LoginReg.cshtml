@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Hello!</title>
+</head>
+
+<body>
+
+    <partial name="RegistrationFormPartial.cshtml"></partial>
+
+    <partial name="LoginFormPartial.cshtml"></partial>
+
+    @* This page use partial to replace the _RegistrationForm and _LoginForm *@
+    @* because one page can only have one @model User or @model LoginUser *@
+    @* So we need to seperate the register and login into 2 cshtml files *@
+    @* and replace the file with <partial> *@
+</body>
+
+</html>

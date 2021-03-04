@@ -1,0 +1,49 @@
+@* ViewBag.User = _context
+    .Users
+    .Find(userId); *@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Hello!</title>
+</head>
+
+<body>
+    
+    <h2>Plan Your Wedding, @ViewBag.User.FirstName</h2>
+    <a asp-action="Dashboard" asp-controller="Home">Dashboard</a>
+    <a asp-action="Logout" asp-controller="Users">Logout</a>
+
+    @model Wedding
+    <form asp-action="CreateWedding" method="post">
+        <div class="form-group">
+            <label asp-for="WedderOne"></label>
+            <input asp-for="WedderOne" class="form-control">
+            <span asp-validation-for="WedderOne" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="WedderTwo"></label>
+            <input asp-for="WedderTwo" class="form-control">
+            <span asp-validation-for="WedderTwo" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Date"></label>
+            <input asp-for="Date" class="form-control">
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="WeddingAddress"></label>
+            <input asp-for="WeddingAddress" class="form-control">
+            <span asp-validation-for="WeddingAddress" class="text-danger"></span>
+        </div>
+        <button>Submit</button>
+
+    </form>
+</body>
+
+</html>

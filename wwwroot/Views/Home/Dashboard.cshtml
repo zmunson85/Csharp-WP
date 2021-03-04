@@ -1,0 +1,65 @@
+@*ViewBag.User = _context
+    .Users
+    .Find(userId);
+
+    ViewBag.Wedding = _context
+    .Weddings
+    .Include( wedding => wedding.PlanedBy)
+    .Include( wedding => wedding.Rsvps)
+    .ToList();
+*@
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2>Welcome to the Wedding Planner, @ViewBag.User.FirstName</h2>
+
+
+@* note that we are sending to a different controller *@
+<a asp-action="Logout" asp-controller="Users">Logout</a>
+
+<table class="table table-striped">
+    <tr>>
+        <th>Planned Person</th>
+        <th>Wedding</th>
+        <th>Date</th>
+        <th>Guest</th>
+        <th>Action</th>
+    </tr>
+    @foreach (Wedding wedding in ViewBag.Wedding)
+    {
+        <tr>
+            <td>@wedding.PlanedBy.FirstName</td>
+            <td><a asp-action="WeddingPage" asp-route-id = "@wedding.WeddingId"> @wedding.WedderOne && @wedding.WedderTwo </a></td>
+            <td>@wedding.Date</td>
+            <td>@wedding.Rsvps.Count</td>
+
+            @*If statement goes here for reserve and unreserve*@
+            <td>
+                @if (wedding.PlanedBy.UserId == ViewBag.User.UserId)
+                {
+                    @*Can delete the wedding*@
+                    <form asp-action="DeleteWedding" asp-route-id=@wedding.WeddingId method="post">
+                        <button>Delete</button>
+                    </form>
+                }
+                @*If current user like this wedding*@
+                else if (wedding.Rsvps.Any(Rsvp => Rsvp.UserId == ViewBag.User.UserId)) //Error can be fixed by replace the var to Movie
+                    
+                {
+                <form asp-action="RemoveRsvp" asp-route-id="@wedding.WeddingId" method="post">
+                    <button>Un-RSVP</button>
+                </form>
+                }
+                else
+                {
+                <form asp-action="AddRsvp" asp-route-id="@wedding.WeddingId" method="post">
+                    <button>RSVP</button>
+                </form>
+                }
+            </td>
+        </tr>
+    }
+
+    <a asp-action="NewWeddingPage">New Wedding</a>
